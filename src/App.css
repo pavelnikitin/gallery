@@ -51,18 +51,18 @@ body {
   background: rgba(21, 21, 21, 0.75); }
 
 .modal-body {
-  width: 60%;
+  width: 57%;
   overflow: hidden;
-  margin:5vh auto;
+  margin: 3.5vh auto;
   padding-bottom: 35px;
   background-color: rgb(255, 255, 255);
   border-radius: 4px;
    }
 
-@media (max-width: 992px) {
+@media (max-width: 810px) {
   .modal-body {
     width: 85%;
-    margin:10vh auto;
+    margin:14vh auto;
   }
 }
  
@@ -91,7 +91,7 @@ body {
   font-size: 1.4rem;
   color: #fff;
   transition: all 0.25s ease-in-out; }
-  .fa-arrow-left:focus,.fa-arrow-right:focus,.fa-arrow-left:hover,.fa-arrow-left:hover {
+  .fa-arrow-left:focus,.fa-arrow-right:focus,.fa-arrow-left:hover,.fa-arrow-right:hover {
     color: #111; 
 
 }

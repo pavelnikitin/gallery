@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import './App.css';
 import GalleryImage from './components/GalleryImage';
 import GalleryModal from './components/GalleryModal';
+import NavLeft from './components/NavLeft';
+import NavRight from './components/NavRight';
+
 
 let imgUrls = [
   'http://mypresentation.ru/documents/884219c23e6888b602805f0674eeb70e/img37.jpg',
@@ -24,17 +27,14 @@ class App extends Component {
 
     this.state = {
       showModal: false,
-      url: ''
+      url: '',
+      fullScreenPhotoIndex: -1
     },
 
     this.openModal = this.openModal.bind(this);
 
     this.closeModal = this.closeModal.bind(this);
-
-    this.showNextFoto = this.showNextFoto.bind(this);
-    this.showPrevFoto = this.showPrevFoto.bind(this);
-    
-    
+    this.handlePhotoNavClick = this.handlePhotoNavClick.bind(this);
       
   }
 
@@ -48,27 +48,30 @@ class App extends Component {
     this.setState({showModal: false, url: ''})
   };
 
+  handlePhotoNavClick() {
+    var newImageIndex = this.state.fullScreenPhotoIndex + 1;
 
-    showNextFoto() {
-    
-      
-      
-    };
-  
+    // Loop to the beginning or end of the gallery when the user reaches the last photo.
+    if(newImageIndex < 0) {
+      newImageIndex = this.props.photoURLs.length - 1;
+    } else if (newImageIndex >= this.props.photoURLs.length) {
+      newImageIndex = 0;
+    }
 
-  showPrevFoto() {
+    this.setState({fullScreenPhotoIndex: newImageIndex});
 
   };
+
 
   render() {
     return (
       <div className='container-fluid gallery-container'>
         <div className='row'>
-          {imgUrls.map((url, index) => {
+          {imgUrls.map((url, newImageIndex) => {
             
-            return <div key={index} className='col-xs-6 col-md-3 col-lg-2'>
+            return <div key={newImageIndex} className='col-xs-6 col-md-3 col-lg-2'>
               <div className='gallery-card'>
-                <GalleryImage src={url} alt={'Image number ' + (index + 1)}/>
+                <GalleryImage src={url} alt={'Image number ' + (newImageIndex+ 1)}/>
 
                 <span
                   className='card-icon-open fa fa-search-plus'
@@ -77,9 +80,12 @@ class App extends Component {
               </div>
             </div>
           })
-}
+}   
         </div>
-        <GalleryModal isOpen={this.state.showModal} nextFoto = {this.showNextFoto()} prevFoto onClick={this.closeModal} src={this.state.url}/>
+        <GalleryModal isOpen={this.state.showModal}  onClick={this.closeModal} src={this.state.url}>
+            <NavLeft onClick={this.handlePhotoNavClick}></NavLeft>
+            <NavRight></NavRight>
+        </GalleryModal> 
       </div>
       
     )
