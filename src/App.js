@@ -28,8 +28,8 @@ class App extends Component {
     this.state = {
       showModal: false,
       url: '',
-      fullScreenPhotoIndex: -1
-    },
+      fullScreenPhotoIndex: 0
+    }
 
     this.openModal = this.openModal.bind(this);
 
@@ -38,53 +38,68 @@ class App extends Component {
       
   }
 
-   // Function for opening modal dialog
-   openModal(url, e) {
-    this.setState({ showModal: true, url: url})
+   // Открытие модального окна
+   openModal(url,e, index) {
+    
+    e.preventDefault();
+
+    this.setState({ showModal: true, url: url, fullScreenPhotoIndex: index})
   };
 
-  // Function for closing modal dialog
+  // Закрытие модального окна
   closeModal() {
     this.setState({showModal: false, url: ''})
   };
 
-  handlePhotoNavClick() {
-    var newImageIndex = this.state.fullScreenPhotoIndex + 1;
 
-    // Loop to the beginning or end of the gallery when the user reaches the last photo.
-    if(newImageIndex < 0) {
-      newImageIndex = this.props.photoURLs.length - 1;
-    } else if (newImageIndex >= this.props.photoURLs.length) {
-      newImageIndex = 0;
+  // Навигация по фотографиям
+  handlePhotoNavClick(e,delta) {
+
+    e.preventDefault();
+
+    var Index = this.state.fullScreenPhotoIndex + delta;
+
+    // Циклирование просмотра, возврат к первому фото после просмотра последнего и наоборот
+    if(Index < 0) {
+      Index = imgUrls.length - 1;
+    } else if (Index >= imgUrls.length) {
+      Index = 0;
     }
 
-    this.setState({fullScreenPhotoIndex: newImageIndex});
+    this.setState({fullScreenPhotoIndex: Index});
 
   };
 
 
   render() {
+    var numImages = imgUrls.length;
+    var fullPhotoURL = this.state.url ;
+    var fullPhotoImageIndex = this.state.fullScreenPhotoIndex;
+    if (fullPhotoImageIndex >= 0 && fullPhotoImageIndex < numImages) {
+      fullPhotoURL = imgUrls[fullPhotoImageIndex];
+    }
+
     return (
       <div className='container-fluid gallery-container'>
         <div className='row'>
-          {imgUrls.map((url, newImageIndex) => {
+          {imgUrls.map((url, Index) => {
             
-            return <div key={newImageIndex} className='col-xs-6 col-md-3 col-lg-2'>
+            return <div key={Index} className='col-xs-6 col-md-3 col-lg-2'>
               <div className='gallery-card'>
-                <GalleryImage src={url} alt={'Image number ' + (newImageIndex+ 1)}/>
+                <GalleryImage src={url}  alt={'Image number ' + (Index+ 1)}/>
 
                 <span
                   className='card-icon-open fa fa-search-plus'
                   value={url}
-                  onClick={(e) => this.openModal(url, e)}></span>
+                  onClick={(e) => this.openModal(url,e, Index)}></span>
               </div>
             </div>
           })
 }   
         </div>
-        <GalleryModal isOpen={this.state.showModal}  onClick={this.closeModal} src={this.state.url}>
-            <NavLeft onClick={this.handlePhotoNavClick}></NavLeft>
-            <NavRight></NavRight>
+        <GalleryModal isOpen={this.state.showModal}  onClick={this.closeModal} src={fullPhotoURL}>
+            <NavLeft onClick={(e,delta) => this.handlePhotoNavClick(e, -1)}></NavLeft>
+            <NavRight onClick={(e,delta) => this.handlePhotoNavClick(e, 1)}></NavRight>
         </GalleryModal> 
       </div>
       

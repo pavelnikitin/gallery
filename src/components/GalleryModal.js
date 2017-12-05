@@ -10,7 +10,7 @@ export default class GalleryModal extends Component {
             {this.props.children} 
             <span className='modal-close fa fa-times-circle-o' onClick={this.props.onClick}></span>
             <div className='modal-body'>   
-                <img className='img-responsive' src={this.props.src} />     
+                <img className='img-responsive' alt = 'foto' src={this.props.src} />     
             </div>
         </div> 
         )

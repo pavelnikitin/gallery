@@ -4,7 +4,7 @@ export default class NavLeft extends Component {
     render() {
         return (
             
-                <span className = 'fa fa-arrow-left'></span>
+                <span onClick= {this.props.onClick} className = 'fa fa-arrow-left'></span>
             
         )
     }
